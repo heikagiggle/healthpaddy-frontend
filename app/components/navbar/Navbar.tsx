@@ -9,7 +9,9 @@ const Navbar = () => {
     <nav>
       <div className="flex justify-between items-center text-[#181818] py-6 px-6 md:px-12 w-full">
         <div className="flex justify-start items-center">
-          <Logo />
+          <Link href={"/"}>
+            <Logo />
+          </Link>
         </div>
 
         {/* Desktop navbar */}

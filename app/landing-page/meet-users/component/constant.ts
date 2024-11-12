@@ -37,6 +37,6 @@ export const customers = [
     energyNeeds: "1500 kcal per day",
     healthGoal: "Weight Loss",
     imageUrl: "https://files.skillpaddy.com/public/image/user-two-1729179003962.png",
-    review:"It's only been my first week, and I've list 1.5 inches from my waist and 1inch from my hip! Plus I'm really enjoying my meal plan, it doesn't feel like I'm on a diet 😂 and my body feels lighter now 🥰. Can't wait for what'll happen in month 2!"
+    review:"It's only been my first week, and I've lost 1.5 inches from my waist and 1 inch from my hip! Plus I'm really enjoying my meal plan, it doesn't feel like I'm on a diet 😂 and my body feels lighter now 🥰. Can't wait for what'll happen in month 2!"
   }
 ];

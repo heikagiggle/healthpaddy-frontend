@@ -27,7 +27,7 @@ const TargetWeight = ({ onNextStep, onPrevStep }: ContainerProps) => {
         onSubmit={handler.handleSubmit(onSubmit)}
         className="flex flex-col h-full"
       >
-        <h1 className="font-medium">What would be your ideal target weight</h1>
+        <h1 className="font-medium">What would be your ideal target weight?</h1>
 
         <div className="flex flex-col gap-y-[15rem]">
           <div className="py-1 mt-4">

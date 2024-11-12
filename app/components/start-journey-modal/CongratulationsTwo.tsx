@@ -33,7 +33,7 @@ const CongratulationsTwo = ({
               <li>Moderate</li>
               <li>80kg</li>
               <li>8 Months</li>
-              <li>Diabetes</li>
+              <li>{selectedCondition.replace("_", " ")}</li>
             </ul>
           </div>
         </div>

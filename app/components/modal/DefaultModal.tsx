@@ -27,7 +27,7 @@ export function DefaultModal({
   return (
     <Dialog {...props}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="lg:max-w-xl md:max-w-lg sm:max-w-md max-w-sm  min-h-[550px] max-h-[550px] flex flex-col">
+      <DialogContent className="lg:max-w-xl md:max-w-lg sm:max-w-md max-w-[22rem] min-h-[550px] max-h-[550px] flex flex-col">
         <DialogHeader>
           <DialogTitle className="font-bold text-xl">{heading}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}

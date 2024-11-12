@@ -9,7 +9,7 @@ export const navigation = [
   },
   {
     title: "Features",
-    href: "features",
+    href: "#features",
   },
   {
     title: "Pricing",

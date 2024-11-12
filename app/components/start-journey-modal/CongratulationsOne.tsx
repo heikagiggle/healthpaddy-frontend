@@ -18,7 +18,6 @@ const CongratulationsOne = ({ onPrevStep }: ContainerProps) => {
               <li>Body Mass Index</li>
               <li>Target Weight</li>
               <li>Duration</li>
-              <li>Health Conditions</li>
             </ul>
             <ul className="font-semibold text-sm flex flex-col gap-y-2">
               <li className="text-[#43A5AE]">Lose Weight</li>
@@ -26,7 +25,6 @@ const CongratulationsOne = ({ onPrevStep }: ContainerProps) => {
               <li>Moderate</li>
               <li>80kg</li>
               <li>8 Months</li>
-              <li>Diabetes</li>
             </ul>
           </div>
         </div>
@@ -34,7 +32,7 @@ const CongratulationsOne = ({ onPrevStep }: ContainerProps) => {
 
       <div className=" text-[#181818] text-center flex flex-col gap-y-2">
         <h3 className="sm:text-lg mt-2 lg:text-2xl font-semibold leading-snug">
-          Congratualtions, We’ve successfully calculated your calorie target!
+          Congratulations, We’ve successfully calculated your calorie target!
         </h3>
 
         <p className="text-sm font-medium pt-2">

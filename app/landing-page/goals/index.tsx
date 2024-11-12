@@ -4,7 +4,7 @@ import StartJourneyModal from "../../components/start-journey-modal/page";
 
 const Goals = () => {
   return (
-    <section className="my-[4rem]">
+    <section className="my-[4rem]" id="features">
       <h2 className="text-2xl lg:text-4xl font-bold text-center mb-8 px-5 pt-[2rem] pb-[1rem] leading-snug lg:leading-tight">
         Customized Nigerian Meal Plans for{" "}
         <span className="hidden lg:inline">

@@ -34,10 +34,10 @@ const HealthConditions = ({
   return (
     <Form {...handler}>
       <form onSubmit={handler.handleSubmit(onSubmit)}>
-        <h1>Are you managing any of these health conditions?</h1>
+        <h1 className="font-semibold">Are you managing any of these health conditions?</h1>
 
         <SelectionComponent
-          name="active" // Make sure the name matches schema
+          name="active"
           label=""
           options={[
             { label: "None", value: "none" },

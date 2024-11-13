@@ -18,7 +18,7 @@ export const GenderSelection = ({ handler }: Props) => {
       <div className="flex gap-4 py-1">
         {/* Male Option */}
         <div
-          className={`flex flex-col items-center p-2 cursor-pointer rounded-lg ${
+          className={`flex flex-col items-center w-1/2 p-2 cursor-pointer rounded-lg ${
             selectedGender === "male"
               ? "border-2 border-blue-500 bg-blue-50"
               : "border"
@@ -31,7 +31,7 @@ export const GenderSelection = ({ handler }: Props) => {
 
         {/* Female Option */}
         <div
-          className={`flex flex-col items-center p-2 cursor-pointer rounded-lg ${
+          className={`flex flex-col items-center w-1/2 p-2 cursor-pointer rounded-lg ${
             selectedGender === "female"
               ? "border-2 border-pink-500 bg-pink-50"
               : "border"

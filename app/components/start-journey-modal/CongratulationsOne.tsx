@@ -42,7 +42,9 @@ const CongratulationsOne = ({ onPrevStep }: ContainerProps) => {
         </p>
 
         <div className="text-[#43A5AE] my-1 font-medium">
-          <p className="cursor-pointer">Generate free meal plan</p>
+          <Link href="/free-meal-plans">
+            <p className="cursor-pointer">Generate free meal plan</p>
+          </Link>
 
           <p className="text-[#18181880] text-xs">or</p>
           <Link href="/free-meal-plans">

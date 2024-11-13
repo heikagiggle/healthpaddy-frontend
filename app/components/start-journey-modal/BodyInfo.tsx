@@ -78,13 +78,14 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
             <label className="block text-sm font-medium text-gray-700">
               Date of birth
             </label>
-            <div className="flex space-x-4 mt-2">
+            <div className="flex sm:space-x-4 space-x-2 mt-2">
               {/* Day */}
               <SelectInput
                 name="date.day"
                 label="Day"
                 placeholder="Select Day"
                 items={generateDays()}
+                className="w-[30%] sm:w-full"
               />
               {/* Month */}
               <SelectInput
@@ -92,6 +93,7 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
                 label="Month"
                 placeholder="Select Month"
                 items={generateMonths}
+                className="w-[30%] sm:w-full"
               />
               {/* Year */}
               <SelectInput
@@ -99,6 +101,7 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
                 label="Year"
                 placeholder="Select Year"
                 items={generateYears()}
+                className="w-[30%] sm:w-full"
               />
             </div>
           </div>
@@ -116,7 +119,7 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
           </div>
 
           <div className="py-1">
-            <TextInput name="weight" type="number" label="Weight" rightLabel="kg" className="w-[160px] sm:w-[250px]" />
+            <TextInput name="weight" type="number" label="Weight" rightLabel="kg" className="w-1/2 sm:w-[250px]" />
           </div>
         </div>
 

@@ -15,7 +15,6 @@ interface UserProfileProps {
 const UserProfile = ({ user }: UserProfileProps) => {
   return (
     <div className="relative flex flex-col items-center justify-center mt-10 overflow-hidden px-4">
-
       {/* Mobile Layout: Image and Stacked Details */}
       <div className="w-full text-center sm:hidden">
         {/* User Image */}
@@ -38,10 +37,18 @@ const UserProfile = ({ user }: UserProfileProps) => {
             <UserDetails label="Age" value={user.age} color="#FF4406" />
           </div>
           <div className="bg-gray-100 rounded-lg p-4 shadow-md mb-4">
-            <UserDetails label="Energy Needs" value={user.energyNeeds} color="#FFA806" />
+            <UserDetails
+              label="Energy Needs"
+              value={user.energyNeeds}
+              color="#FFA806"
+            />
           </div>
           <div className="bg-gray-100 rounded-lg p-4 shadow-md mb-4">
-            <UserDetails label="Health Goal" value={user.healthGoal} color="#119807" />
+            <UserDetails
+              label="Health Goal"
+              value={user.healthGoal}
+              color="#119807"
+            />
           </div>
         </div>
 
@@ -54,7 +61,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
       {/* Desktop Layout */}
       <div className="hidden sm:flex flex-col items-center mt-10">
         {/* User Image */}
-        <div className="relative w-64 h-64 sm:w-56 sm:h-56 md:w-64 md:h-64">
+        <div className="relative w-64 h-64 sm:h-56 md:w-64 md:h-64">
           <div className="relative mx-auto rounded-full w-full h-[248px] overflow-hidden border-4 border-gray-300">
             <Image
               src={user.imageUrl}
@@ -87,7 +94,11 @@ const UserProfile = ({ user }: UserProfileProps) => {
 
           <div className="absolute top-[20px] left-0 transform translate-x-full">
             <div className="absolute top-[-40px] right-[-2rem]">
-              <UserDetails label="Energy Needs" value={user.energyNeeds} color="#FFA806" />
+              <UserDetails
+                label="Energy Needs"
+                value={user.energyNeeds}
+                color="#FFA806"
+              />
             </div>
             <svg
               width="200"
@@ -105,8 +116,13 @@ const UserProfile = ({ user }: UserProfileProps) => {
           </div>
 
           <div className="absolute bottom-0 right-3 transform -translate-x-full -z-10">
-            <div className="absolute top-[-40px] right-[6.5rem]">
-              <UserDetails label="Age" value={user.age} color="#FFA806" />
+            <div className="absolute top-[-40px] left-[-4rem]">
+              <UserDetails
+                label="Health Goal"
+                value={user.healthGoal}
+                color="#119807"
+                className="text-right w-40"
+              />
             </div>
             <svg
               width="200"
@@ -124,9 +140,8 @@ const UserProfile = ({ user }: UserProfileProps) => {
           </div>
 
           <div className="absolute bottom-0 transform translate-x-full -z-10">
-            <div className="absolute top-[-40px] -right-3
-            ">
-              <UserDetails label="Health Goal" value={user.healthGoal} color="#119807" className="text-right" />
+            <div className="absolute top-[-40px] right-[3rem]">
+              <UserDetails label="Age" value={user.age} color="#FFA806" />
             </div>
             <svg
               width="200"

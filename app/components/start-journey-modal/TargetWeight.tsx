@@ -5,22 +5,37 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { TextInput } from "../form/text-input";
 import { SubmitButton } from "../form/SubmitButton";
+import { useTargetWeight } from "../../hooks/start-journey/TargetWeight";
+import toast from "react-hot-toast";
 
 const PersonalInfoSchema = z.object({
-  target_weight: z.string().min(1, { message: "target weight is required" }),
+  targetWeight: z.coerce
+    .number()
+    .min(1, { message: "target weight is required" }),
 });
 
 export type PersonalInfoData = z.infer<typeof PersonalInfoSchema>;
 
 const TargetWeight = ({ onNextStep, onPrevStep }: ContainerProps) => {
+  const { handleTargetWeight, loading } = useTargetWeight();
   const handler = useForm<PersonalInfoData>({
     resolver: zodResolver(PersonalInfoSchema),
     mode: "onChange",
   });
 
-  const onSubmit = (data: PersonalInfoData) => {
-    console.log(data);
+  const onSubmit = async (data: PersonalInfoData) => {
+    const phone = sessionStorage.getItem("phone") || "";
+    try {
+      await handleTargetWeight({
+        targetWeight: data.targetWeight,
+        phone,
+      });
+      onNextStep && onNextStep();
+    } catch (error) {
+      toast.error("There was an error submitting your weight.");
+    }
   };
+  
   return (
     <Form {...handler}>
       <form
@@ -32,9 +47,10 @@ const TargetWeight = ({ onNextStep, onPrevStep }: ContainerProps) => {
         <div className="flex flex-col gap-y-[15rem]">
           <div className="py-1 mt-4">
             <TextInput
-              name={"target_weight"}
+              name={"targetWeight"}
               label={"Target weight"}
               rightLabel={"kg"}
+              type={"number"}
             />
           </div>
 
@@ -45,7 +61,7 @@ const TargetWeight = ({ onNextStep, onPrevStep }: ContainerProps) => {
             >
               Back
             </SubmitButton>
-            <SubmitButton onClick={onNextStep}>Next</SubmitButton>
+            <SubmitButton loading={loading}>Next</SubmitButton>
           </div>
         </div>
       </form>

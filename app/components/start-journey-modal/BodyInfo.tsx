@@ -3,74 +3,44 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { TextInput } from "../form/text-input";
-import { z } from "zod";
 import { SubmitButton } from "../form/SubmitButton";
-import { SelectInput } from "../form/select-input"; 
-import {GenderSelection} from './../GenderSelection';
-import { useState } from "react";
-
-const BodyInfoSchema = z.object({
-  gender: z.string().min(1, { message: "gender is required" }),
-  date: z.object({
-    day: z.string().min(1, { message: "Day is required" }),
-    month: z.string().min(1, { message: "Month is required" }),
-    year: z.string().min(1, { message: "Year is required" }),
-  }),
-  heightFt: z.string().min(1, { message: "height is required" }),
-  heightIn: z.string().min(1, { message: "height is required" }),
-  weight: z.string().min(1, { message: "weight is required" }),
-});
-
-export type BodyInfoData = z.infer<typeof BodyInfoSchema>;
-
-// Helper to generate days, months, and years
-const generateDays = () =>
-  Array.from({ length: 31 }, (_, i) => ({
-    label: (i + 1).toString(),
-    value: (i + 1).toString(),
-    keywords: [(i + 1).toString()],
-  }));
-
-const generateMonths = [
-  { label: "January", value: "1", keywords: ["january", "1", "jan"] },
-  { label: "February", value: "2", keywords: ["february", "2", "feb"] },
-  { label: "March", value: "3", keywords: ["march", "3", "mar"] },
-  { label: "April", value: "4", keywords: ["april", "4", "apr"] },
-  { label: "May", value: "5", keywords: ["may", "5"] },
-  { label: "June", value: "6", keywords: ["june", "6", "jun"] },
-  { label: "July", value: "7", keywords: ["july", "7", "jul"] },
-  { label: "August", value: "8", keywords: ["august", "8", "aug"] },
-  { label: "September", value: "9", keywords: ["september", "9", "sep"] },
-  { label: "October", value: "10", keywords: ["october", "10", "oct"] },
-  { label: "November", value: "11", keywords: ["november", "11", "nov"] },
-  { label: "December", value: "12", keywords: ["december", "12", "dec"] },
-];
-
-const generateYears = () => {
-  const currentYear = new Date().getFullYear();
-  return Array.from({ length: 82 }, (_, i) => ({
-    label: (currentYear - i - 18).toString(),
-    value: (currentYear - i - 18).toString(),
-    keywords: [(currentYear - i - 18).toString()],
-  }));
-};
+import { SelectInput } from "../form/select-input";
+import { GenderSelection } from "./../GenderSelection";
+import { useBioData } from "../../hooks/start-journey/BioData";
+import toast from "react-hot-toast";
+import { generateDays, generateMonths, generateYears } from "./helpers";
+import { BodyInfoData, BodyInfoSchema } from "./schema/schema";
 
 const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
+  const { handleBioData, loading, success } = useBioData();
+
   const handler = useForm<BodyInfoData>({
     resolver: zodResolver(BodyInfoSchema),
     mode: "onChange",
   });
 
-  const onSubmit = (data: BodyInfoData) => {
-    console.log(data);
+  const onSubmit = async (data: BodyInfoData) => {
+    const phone = sessionStorage.getItem("phone") || "";
+    try {
+      await handleBioData({
+        gender: data.gender,
+        dateOfBirth: `${data.dateOfBirth.day}/${data.dateOfBirth.month}/${data.dateOfBirth.year}`,
+        weight: data.weight,
+        height: `${data.heightFt}'${data.heightIn}`,
+        phone,
+      });
+      onNextStep && onNextStep();
+    } catch (error) {
+      toast.error("There was an error submitting your Bio-data.");
+    }
   };
 
   return (
     <Form {...handler}>
       <form onSubmit={handler.handleSubmit(onSubmit)}>
         <h1 className="font-medium">
-          Now let&apos;s get to know you a bit better, so we can make sure your meal
-          plans are tailored just for you
+          Now let&apos;s get to know you a bit better, so we can make sure your
+          meal plans are tailored just for you
         </h1>
         <div className={"flex flex-col gap-3 mb-20 mt-2"}>
           {/* Date of Birth Select */}
@@ -78,10 +48,10 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
             <label className="block text-sm font-medium text-gray-700">
               Date of birth
             </label>
-            <div className="flex sm:space-x-4 space-x-2 mt-2">
+            <div className="flex sm:space-x-4 md:space-x-6 lg:space-x-4 space-x-2 mt-2">
               {/* Day */}
               <SelectInput
-                name="date.day"
+                name="dateOfBirth.day"
                 label="Day"
                 placeholder="Select Day"
                 items={generateDays()}
@@ -89,7 +59,7 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
               />
               {/* Month */}
               <SelectInput
-                name="date.month"
+                name="dateOfBirth.month"
                 label="Month"
                 placeholder="Select Month"
                 items={generateMonths}
@@ -97,7 +67,7 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
               />
               {/* Year */}
               <SelectInput
-                name="date.year"
+                name="dateOfBirth.year"
                 label="Year"
                 placeholder="Select Year"
                 items={generateYears()}
@@ -106,20 +76,36 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
             </div>
           </div>
 
-          <GenderSelection handler={handler}/>
+          <GenderSelection handler={handler} />
 
           <div className="py-1">
             <label htmlFor="" className="text-sm">
               Height
             </label>
             <div className="flex gap-x-3">
-              <TextInput name="heightFt" type={"number"} label="" rightLabel="ft" />
-              <TextInput name="heightIn" type={"number"} label="" rightLabel="in" />
+              <TextInput
+                name="heightFt"
+                type={"number"}
+                label=""
+                rightLabel="ft"
+              />
+              <TextInput
+                name="heightIn"
+                type={"number"}
+                label=""
+                rightLabel="in"
+              />
             </div>
           </div>
 
           <div className="py-1">
-            <TextInput name="weight" type="number" label="Weight" rightLabel="kg" className="w-1/2 sm:w-[250px]" />
+            <TextInput
+              name="weight"
+              type="number"
+              label="Weight"
+              rightLabel="kg"
+              className="w-1/2 sm:w-[250px]"
+            />
           </div>
         </div>
 
@@ -130,7 +116,7 @@ const BodyInfo = ({ onNextStep, onPrevStep }: ContainerProps) => {
           >
             Back
           </SubmitButton>
-          <SubmitButton onClick={onNextStep}>Next</SubmitButton>
+          <SubmitButton loading={loading}>Next</SubmitButton>
         </div>
       </form>
     </Form>

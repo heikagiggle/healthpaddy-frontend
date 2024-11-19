@@ -5,22 +5,36 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { TextInput } from "../form/text-input";
 import { SubmitButton } from "../form/SubmitButton";
+import { useGoalDuration } from "../../hooks/start-journey/GoalDuration";
+import toast from "react-hot-toast";
 
 const PersonalInfoSchema = z.object({
-  target_month: z.string().min(1, { message: "target month is required" }),
+  durationInMonth: z.coerce
+    .number()
+    .min(1, { message: "target month is required" }),
 });
-
 export type PersonalInfoData = z.infer<typeof PersonalInfoSchema>;
 
 const TargetMonth = ({ onNextStep, onPrevStep }: ContainerProps) => {
+  const { handleGoalDuration, loading } = useGoalDuration();
   const handler = useForm<PersonalInfoData>({
     resolver: zodResolver(PersonalInfoSchema),
     mode: "onChange",
   });
 
-  const onSubmit = (data: PersonalInfoData) => {
-    console.log(data);
+  const onSubmit = async (data: PersonalInfoData) => {
+    const phone = sessionStorage.getItem("phone") || "";
+    try {
+      await handleGoalDuration({
+        durationInMonth: data.durationInMonth,
+        phone,
+      });
+      onNextStep && onNextStep();
+    } catch (error) {
+      toast.error("There was an error submitting your goal duration.");
+    }
   };
+
   return (
     <Form {...handler}>
       <form
@@ -33,9 +47,10 @@ const TargetMonth = ({ onNextStep, onPrevStep }: ContainerProps) => {
         <div className="flex flex-col gap-y-[15rem]">
           <div className="py-1 mt-4">
             <TextInput
-              name={"target_month"}
+              name={"durationInMonth"}
               label={"Weight Goal (months)"}
               rightLabel={"Months (s)"}
+              type={"number"}
             />
           </div>
 
@@ -46,7 +61,7 @@ const TargetMonth = ({ onNextStep, onPrevStep }: ContainerProps) => {
             >
               Back
             </SubmitButton>
-            <SubmitButton onClick={onNextStep}>Next</SubmitButton>
+            <SubmitButton loading={loading}>Next</SubmitButton>
           </div>
         </div>
       </form>

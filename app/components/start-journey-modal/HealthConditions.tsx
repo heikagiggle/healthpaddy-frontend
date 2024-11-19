@@ -5,13 +5,15 @@ import { Form } from "../ui/form";
 import { z } from "zod";
 import { SubmitButton } from "../form/SubmitButton";
 import { SelectionComponent } from "../widget/SelectionComponent";
+import { useHealthCondition } from "../../hooks/start-journey/HealthCondition";
+import toast from "react-hot-toast";
 
 interface HealthConditionsProps extends ContainerProps {
   handleConditionSelect: (condition: string) => void;
 }
 
 const HealthSchema = z.object({
-  active: z.string().min(1, { message: "Please select" }),
+  healthCondition: z.string().min(1, { message: "Please select" }),
 });
 
 export type HealthData = z.infer<typeof HealthSchema>;
@@ -21,29 +23,41 @@ const HealthConditions = ({
   onPrevStep,
   handleConditionSelect,
 }: HealthConditionsProps) => {
+  const { handleHealthCondition, loading } = useHealthCondition();
   const handler = useForm<HealthData>({
     resolver: zodResolver(HealthSchema),
     mode: "onChange",
   });
 
-  const onSubmit = (data: HealthData) => {
-    // Continue to next step depending on the selection
-    handleConditionSelect(data.active);
+  const onSubmit = async (data: HealthData) => {
+    const phone = sessionStorage.getItem("phone") || "";
+    try {
+      await handleHealthCondition({
+        healthCondition: data.healthCondition,
+         phone,
+       });
+      handleConditionSelect(data.healthCondition);
+    } catch (error) {
+      toast.error("There was an error submitting your health Condition level.");
+    }
   };
+
 
   return (
     <Form {...handler}>
       <form onSubmit={handler.handleSubmit(onSubmit)}>
-        <h1 className="font-semibold">Are you managing any of these health conditions?</h1>
+        <h1 className="font-semibold">
+          Are you managing any of these health conditions?
+        </h1>
 
         <SelectionComponent
-          name="active"
+          name="healthCondition"
           label=""
           options={[
             { label: "None", value: "none" },
             { label: "Hypertension", value: "hypertension" },
-            { label: "Diabetes/Pre-diabetes", value: "diabetes" },
-            { label: "High Cholesterol", value: "high_cholesterol" },
+            { label: "Diabetes/Pre-diabetes", value: "diabetes/pre-diabetes" },
+            { label: "High Cholesterol", value: "high-cholesterol" },
             { label: "Polycystic Ovary Syndrome (PCOS)", value: "pcos" },
             { label: "I am pregnant", value: "pregnant" },
           ]}
@@ -57,7 +71,7 @@ const HealthConditions = ({
           >
             Back
           </SubmitButton>
-          <SubmitButton type="submit">Next</SubmitButton>
+          <SubmitButton loading={loading}>Next</SubmitButton>
         </div>
       </form>
     </Form>

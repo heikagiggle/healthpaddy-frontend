@@ -5,29 +5,45 @@ import { Form } from "../ui/form";
 import { z } from "zod";
 import { SubmitButton } from "../form/SubmitButton";
 import { SelectionComponent } from "../widget/SelectionComponent";
+import { useActivityLevel } from "../../hooks/start-journey/ActivityLevel";
+import toast from "react-hot-toast";
 
 const ActiveSchema = z.object({
-  active: z.string().min(1, { message: "Please select" }),
+  activityLevel: z.string().min(1, { message: "Please select" }),
 });
 
 export type ActiveData = z.infer<typeof ActiveSchema>;
 
-const PhysicallyActive = ({ onNextStep, onPrevStep }: ContainerProps) => {
+const PhysicallyActive = ({
+  onNextStep,
+  onPrevStep,
+}: ContainerProps) => {
+  const { handleActivityLevel, loading, success } = useActivityLevel();
   const handler = useForm<ActiveData>({
     resolver: zodResolver(ActiveSchema),
     mode: "onChange",
   });
 
-  const onSubmit = (data: ActiveData) => {
-    console.log(data);
+  const onSubmit = async (data: ActiveData) => {
+    const phone = sessionStorage.getItem("phone") || "";
+    try {
+      await handleActivityLevel({
+        activityLevel: data.activityLevel,
+        phone,
+      });
+      onNextStep && onNextStep();
+    } catch (error) {
+      toast.error("There was an error submitting your active level.");
+    }
   };
+
   return (
     <Form {...handler}>
       <form onSubmit={handler.handleSubmit(onSubmit)}>
         <h1 className="font-medium">How physically active are you?</h1>
         <div className={"flex flex-col gap-3 mb-20 mt-2"}>
           <SelectionComponent
-            name="active"
+            name="activityLevel"
             label=""
             options={[
               {
@@ -39,24 +55,24 @@ const PhysicallyActive = ({ onNextStep, onPrevStep }: ContainerProps) => {
                 label: "Mild activity",
                 description:
                   "Intense exercise for at least 20 minutes 1-3 times per week",
-                value: "mild_activity",
+                value: "mild",
               },
               {
                 label: "Moderate activity",
                 description: "Intense exercise for 60 min 3 - 4 times per week",
-                value: "moderate_activity",
+                value: "moderate",
               },
               {
                 label: "Heavy or labor",
                 description:
                   "Intensive activity (intense exercise for 60 min or greater, 5 to 7 days per week",
-                value: "heavy_labor",
+                value: "heavy",
               },
               {
                 label: "Extreme activity",
                 description:
                   "Exceedingly active and/or very demanding activities",
-                value: "extreme_activity",
+                value: "extreme",
               },
             ]}
           />
@@ -69,7 +85,7 @@ const PhysicallyActive = ({ onNextStep, onPrevStep }: ContainerProps) => {
           >
             Back
           </SubmitButton>
-          <SubmitButton onClick={onNextStep}>Next</SubmitButton>
+          <SubmitButton loading={loading}>Next</SubmitButton>
         </div>
       </form>
     </Form>
